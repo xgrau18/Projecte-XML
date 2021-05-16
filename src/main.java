@@ -1,8 +1,9 @@
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -15,8 +16,7 @@ public class main {
         int opcio = 0;
 
         System.out.println();
-        System.out.println("------------------------------------------");
-        System.out.println();
+        System.out.println("--------------------------------------------------------------");
 
         System.out.println("Mòdul d'stock: ");
         System.out.println("\t[1]\t Afegir producte");
@@ -39,6 +39,7 @@ public class main {
     static ArrayList<String[]>  afegir_producte( ArrayList<String[]> database ) {
 
         String codi_barres, nom, seccio, preu;
+        int opcio;
         Scanner sc = new Scanner(System.in);
         System.out.println();
         System.out.print("Codi de barres: ");
@@ -56,6 +57,22 @@ public class main {
         String[] register = new String[]{codi_barres, nom, seccio, preu};
         database.add(database.size(), register);
 
+        System.out.println();
+        System.out.println("--------------------------------------------------------------");
+
+        System.out.println("Producte afegit correctament! Vols afegir un altre? ");
+
+        System.out.println("\t[1] Si");
+        System.out.println("\t[2] No\n");
+
+        System.out.print("Opció: \t ");
+        opcio = sc.nextInt();
+
+        switch (opcio) {
+            case 1: afegir_producte(database); break;
+            case 2: break;
+        }
+
         return database;
 
     }
@@ -65,7 +82,23 @@ public class main {
         Scanner sc = new Scanner(System.in);
         String id = "0";
 
-        System.out.println("ID del producto a eliminar:");
+        System.out.println();
+        System.out.println("--------------------------------------------------------------");
+        System.out.println();
+
+        for (int i = 0; i < database.size(); i++) {
+            String[] array = database.get(i);
+            System.out.println((i + 1) + ". Codi: " + array[0] +
+                    "\t Nom: " + array[1] +
+                    "\t Secció: " + array[2] +
+                    "\t Preu: " + array[3] + "€" );
+        }
+
+        System.out.println();
+        System.out.println("--------------------------------------------------------------");
+        System.out.println();
+
+        System.out.print("Codi del producte a eliminar: ");
         id = sc.nextLine();
         for (int i = 0; i < database.size(); i++) {
             String[] arr = database.get(i);
@@ -81,6 +114,10 @@ public class main {
 
     static void llistar_producte(ArrayList<String[]> database) {
 
+        System.out.println();
+        System.out.println("--------------------------------------------------------------");
+        System.out.println();
+
         for (int i = 0; i < database.size(); i++) {
             String[] array = database.get(i);
             System.out.println((i + 1) + ". Codi: " + array[0] +
@@ -88,6 +125,25 @@ public class main {
                     "\t Secció: " + array[2] +
                     "\t Preu: " + array[3] + "€" );
         }
+
+        Scanner sc = new Scanner(System.in);
+        int opcio = 0;
+
+        System.out.println();
+        System.out.println("--------------------------------------------------------------");
+
+        System.out.println("Tornar al menú principal: ");
+        System.out.println("\t[1] Si\n");
+
+        System.out.print("Opció: \t ");
+        opcio = sc.nextInt();
+        System.out.println();
+
+        switch (opcio) {
+            case 1: break;
+            case 2: break;
+        }
+
     }
 
     static ArrayList<String[]> modul_venda(ArrayList<String[]> database) {
@@ -96,8 +152,7 @@ public class main {
         int opcio = 0;
 
         System.out.println();
-        System.out.println("------------------------------------------");
-        System.out.println();
+        System.out.println("--------------------------------------------------------------");
 
         System.out.println("Mòdul venta: ");
         System.out.println("\t[1]\t Fer una venta");
@@ -105,6 +160,7 @@ public class main {
 
         System.out.print("Opció: \t ");
         opcio = sc.nextInt();
+        System.out.println();
 
         switch (opcio) {
             case 1: venta(database, carrito); break;
@@ -122,8 +178,7 @@ public class main {
         int opcio = 0;
 
         System.out.println();
-        System.out.println("------------------------------------------");
-        System.out.println();
+        System.out.println("--------------------------------------------------------------");
 
         System.out.println("Venta: ");
         System.out.println("\t[1]\t Afegir producte");
@@ -149,7 +204,23 @@ public class main {
         String value, cuantitat;
         String[] producte = new String[5];
         Scanner sc = new Scanner(System.in);
+
         System.out.println();
+        System.out.println("--------------------------------------------------------------");
+        System.out.println();
+
+        for (int i = 0; i < database.size(); i++) {
+            String[] array = database.get(i);
+            System.out.println((i + 1) + ". Codi: " + array[0] +
+                    "\t Nom: " + array[1] +
+                    "\t Secció: " + array[2] +
+                    "\t Preu: " + array[3] + "€" );
+        }
+
+        System.out.println();
+        System.out.println("--------------------------------------------------------------");
+        System.out.println();
+
         System.out.print("Introdueix el nom o el codi de barres del producte: ");
         value = sc.nextLine();
         System.out.print("Introdueix la cuantitat a comprar: ");
@@ -179,15 +250,33 @@ public class main {
         String pattern = "dd-M-yyyy";
         SimpleDateFormat DateFormat = new SimpleDateFormat(pattern);
 
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH:mm:ss");
+        String date = dtf.format(LocalDateTime.now());
+
         try {
-            BufferedWriter bf = new BufferedWriter(new FileWriter("_test.txt"));
+            BufferedWriter bf = new BufferedWriter(new FileWriter("ticket_" + date + ".txt"));
+            int total = 0;
+            int suma = 0;
+
+            bf.write("-----------------------------------");
+            bf.newLine();
+            bf.write("Ticket Supermercat");
+            bf.newLine();
+            bf.write("Num: " + (int) (Math.random() + 100001));
+            bf.newLine();
+            bf.write("-----------------------------------");
+            bf.newLine();
 
             for (int i = 0; i < carrito.size(); i++) {
                 String[] array = carrito.get(i);
-                bf.write("test");
-                bf.write(Arrays.toString(array));
+                suma = Integer.parseInt(array[4]) * Integer.parseInt(array[3]);
+                bf.write(array[1] + "\t\t" + array[4] + " x " + array[3] + "€ \t " + suma + "€");
                 bf.newLine();
+                total += suma;
             }
+
+            bf.newLine();
+            bf.write("TOTAL: " + total + "€");
 
             bf.close();
 
@@ -207,9 +296,10 @@ public class main {
 
         while (primera_opcio != -1) {
 
-            System.out.println("------------------------------------------");
+            System.out.println();
+            System.out.println("--------------------------------------------------------------");
             System.out.println("Benvingut al Supermarket!");
-            System.out.println("------------------------------------------");
+            System.out.println("--------------------------------------------------------------");
 
             System.out.println("Menú pricipal: ");
             System.out.println("\t[1]\t Mòdul d’estoc");
