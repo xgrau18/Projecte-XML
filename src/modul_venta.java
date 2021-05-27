@@ -99,6 +99,7 @@ public class modul_venta {
                 }
                 producte[4] = cuantitat;
                 carrito.add(producte);
+                break;
             }
         }
 
