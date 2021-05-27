@@ -56,7 +56,7 @@ public class modul_venta {
         switch (opcio) {
             case 1: afegir_producte_carrito(database, carrito); break;
             case 2: generar_ticket(carrito); break;
-            case 3: modul_venda(database); break;
+            case 3: System.exit(0); break;
             case -1: break;
         }
 
@@ -69,7 +69,8 @@ public class modul_venta {
         String value, cuantitat;
         String[] producte = new String[5];
         Scanner sc = new Scanner(System.in);
-
+        int opcio;
+        boolean exists = false;
         System.out.println();
         System.out.println("--------------------------------------------------------------");
         System.out.println();
@@ -94,6 +95,7 @@ public class modul_venta {
         for (int i = 0; i < database.size(); i++) {
             String[] arr = database.get(i);
             if (arr[0].equals(value) ||arr[1].equals(value)) {
+                exists = true;
                 for (int j = 0; j < arr.length; j++) {
                     producte[j] = arr[j];
                 }
@@ -102,6 +104,24 @@ public class modul_venta {
                 break;
             }
         }
+
+        if (! exists) {
+            System.out.println();
+            System.out.println("--------------------------------------------------------------");
+            System.out.println();
+            System.out.println("No s'ha trobat cap producte amb el codi de barres proporcionat");
+            System.out.println("Vols tornar a intentar-ho?");
+            System.out.println("\t[1]\t Si");
+            System.out.println("\t[2]\t No");
+            opcio = sc.nextInt();
+
+            switch (opcio) {
+                case 1: afegir_producte_carrito(database, carrito); break;
+                case 2: break;
+            }
+
+        }
+
 
         venta(database, carrito);
         return carrito;
