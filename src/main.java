@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class main {
@@ -14,6 +15,8 @@ public class main {
             System.out.println();
             System.out.println("--------------------------------------------------------------");
             System.out.println("Benvingut al Supermarket!");
+            Date data = new Date();
+            System.out.println(data+" Grau Sebastian_Ortega Farrerons");
             System.out.println("--------------------------------------------------------------");
 
             System.out.println("Menú pricipal: ");
